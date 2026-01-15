@@ -38,7 +38,7 @@
     "jobTitle": "Web Developer & Student",
     "sameAs": [
       "https://www.linkedin.com/in/your-linkedin-username",
-      "https://wa.me/your-whatsapp-number-with-country-code"
+      "https://wa.me/919491583719"
     ]
   }
   </script>
@@ -78,23 +78,22 @@
       --glass: rgba(255, 255, 255, 0.6);
       --glass-2: rgba(0, 0, 0, 0.03);
       --shadow: 0 6px 20px rgba(18, 24, 40, 0.06);
+    }
 
-      /* Get Connected buttons in light mode */
-      .social-btn {
-        background: #0b76ef;
-        color: #ffffff;
-        border-color: rgba(11, 118, 239, 0.25);
-      }
+    [data-theme="light"] .social-btn {
+      background: #0b76ef;
+      color: #ffffff;
+      border-color: rgba(11, 118, 239, 0.25);
+    }
 
-      .social-btn:hover {
-        background: #095bb6;
-        color: #ffffff;
-        box-shadow: 0 8px 20px rgba(9, 91, 182, 0.35);
-      }
+    [data-theme="light"] .social-btn:hover {
+      background: #095bb6;
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(9, 91, 182, 0.35);
+    }
 
-      .social-connect-label {
-        color: var(--muted-2);
-      }
+    [data-theme="light"] .social-connect-label {
+      color: var(--muted-2);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -274,7 +273,6 @@
       outline: 2px solid var(--accent)
     }
 
-    /* MOBILE SIDE NAV (off-canvas) */
     .mobile-nav {
       position: fixed;
       right: 0;
@@ -287,7 +285,7 @@
       box-shadow: var(--shadow);
       z-index: 210;
       transform: translateX(100%);
-      transition: transform var(--transition-medium) ease;
+      transition: transform var(--transition-medium) cubic-bezier(.4,0,.2,1);
       display: flex;
       flex-direction: column;
     }
@@ -352,19 +350,30 @@
     }
 
     .hero-card {
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+      background: linear-gradient(135deg, rgba(88, 166, 255, 0.04), rgba(108, 225, 255, 0.02));
       padding: 28px;
       border-radius: 18px;
       box-shadow: var(--shadow);
       overflow: visible;
       position: relative;
       transform-origin: center;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(12px);
+      transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+    }
+
+    .hero-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 60px rgba(88, 166, 255, 0.12);
     }
 
     .headline {
       font-size: 30px;
-      color: var(--muted);
-      margin: 0 0 8px
+      margin: 0 0 8px;
+      background: linear-gradient(90deg, var(--muted), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .intro {
@@ -394,11 +403,29 @@
       border: none;
       transform: translateZ(0);
       transition: transform var(--transition-fast) cubic-bezier(.2, .9, .3, 1), box-shadow var(--transition-fast), filter var(--transition-fast);
+      position: relative;
+      overflow: visible;
     }
 
     .btn:hover {
       transform: translateY(-6px) scale(1.02);
       filter: brightness(1.05);
+    }
+
+    .btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: inherit;
+      filter: blur(18px);
+      opacity: 0;
+      z-index: -1;
+      transition: opacity var(--transition-fast);
+    }
+
+    .btn:hover::after {
+      opacity: 0.5;
     }
 
     .secondary {
@@ -435,11 +462,35 @@
       border: 1px solid var(--glass-2);
       transform-style: preserve-3d;
       transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+      position: relative;
+      overflow: hidden;
     }
 
     .profile:hover {
       box-shadow: 0 16px 40px rgba(2, 6, 12, 0.7);
       transform: translateY(-4px);
+    }
+
+    .profile::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent));
+      background-size: 200% 200%;
+      animation: gradientMove 4s ease infinite;
+      z-index: -1;
+      border-radius: inherit;
+      opacity: 0;
+      transition: opacity var(--transition-medium);
+    }
+
+    .profile:hover::before {
+      opacity: 0.6;
+    }
+
+    @keyframes gradientMove {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
 
     .avatar {
@@ -499,6 +550,29 @@
       padding: 16px;
       border-radius: 12px;
       box-shadow: var(--shadow);
+      position: relative;
+      transition: transform var(--transition-fast) cubic-bezier(.2, .9, .3, 1),
+                  box-shadow var(--transition-fast),
+                  background var(--transition-fast);
+    }
+
+    .skill::before,
+    .cert-item::before,
+    .project-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(88, 166, 255, 0.08), transparent);
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+      pointer-events: none;
+    }
+
+    .skill:hover::before,
+    .cert-item:hover::before,
+    .project-card:hover::before {
+      opacity: 1;
     }
 
     .skill .label {
@@ -638,13 +712,8 @@
     }
 
     @keyframes fadeIn {
-      from {
-        opacity: 0
-      }
-
-      to {
-        opacity: 1
-      }
+      from { opacity: 0 }
+      to { opacity: 1 }
     }
 
     @keyframes slideIn {
@@ -652,7 +721,6 @@
         transform: translateY(18px);
         opacity: 0
       }
-
       to {
         transform: translateY(0);
         opacity: 1
@@ -743,6 +811,9 @@
       padding: 16px;
       border-radius: 12px;
       box-shadow: var(--shadow);
+      transition: transform var(--transition-fast) cubic-bezier(.2, .9, .3, 1),
+                  box-shadow var(--transition-fast),
+                  background var(--transition-fast);
     }
 
     .row {
@@ -795,6 +866,10 @@
       border: 1px solid var(--glass-2);
       font-size: 14px;
       color: var(--muted-2);
+      position: relative;
+      transition: transform var(--transition-fast) cubic-bezier(.2, .9, .3, 1),
+                  box-shadow var(--transition-fast),
+                  background var(--transition-fast);
     }
 
     .cert-item strong {
@@ -811,7 +886,6 @@
       margin: 0 auto;
     }
 
-    /* Get Connected social bar */
     .social-connect {
       margin-top: 18px;
       display: flex;
@@ -847,17 +921,190 @@
       box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
     }
 
-    /* prevent hero glow from causing horizontal scroll on very small screens */
     .hero-card > div[style*="position:absolute"] {
       max-width: 100vw;
+    }
+
+    /* NEW: About section layout and spacing */
+    .about-card {
+      max-width: 820px;
+      margin-inline: auto;
+      padding: 24px 24px;
+    }
+
+    .about-text {
+      margin: 10px 0;
+      color: var(--muted-2);
+      line-height: 1.75;
+      letter-spacing: 0.2px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 16px 14px;
+      }
+
+      .hero {
+        margin-top: 80px;
+        gap: 14px;
+      }
+
+      .hero-card {
+        padding: 20px 16px;
+      }
+
+      .headline {
+        font-size: 24px;
+      }
+
+      .intro {
+        font-size: 14px;
+      }
+
+      .cta {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .btn, .secondary {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .social-connect {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .profile {
+        flex-direction: column;
+        text-align: center;
+        padding: 14px;
+      }
+
+      .avatar {
+        width: 70px;
+        height: 70px;
+      }
+
+      h2 {
+        font-size: 18px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .filters {
+        justify-content: center;
+      }
+
+      .filter-btn {
+        padding: 6px 10px;
+        font-size: 13px;
+      }
+
+      .row {
+        flex-direction: column;
+      }
+
+      .row input {
+        flex: 1 1 100%;
+      }
+
+      .nav .brand {
+        gap: 8px;
+      }
+
+      .logo {
+        width: 50px;
+        height: 36px;
+        font-size: 14px;
+      }
+
+      .nav .brand > div > div:first-child {
+        font-size: 14px;
+      }
+
+      /* NEW: tighter About spacing on small screens */
+      #about {
+        margin-top: 12px;
+        margin-bottom: 20px;
+      }
+
+      .about-card {
+        padding: 18px 14px;
+      }
+
+      .about-text {
+        font-size: 14px;
+        line-height: 1.65;
+        margin: 6px 0;
+      }
+    }
+
+    @media (min-width: 601px) and (max-width: 880px) {
+      .hero {
+        margin-top: 100px;
+      }
+
+      .headline {
+        font-size: 26px;
+      }
+
+      .cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      /* About tablet spacing */
+      .about-card {
+        padding: 20px 18px;
+        margin-top: 4px;
+      }
+
+      .about-text {
+        font-size: 14px;
+        margin: 8px 0;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .container {
+        max-width: 1200px;
+      }
+
+      .hero-card {
+        padding: 36px;
+      }
+
+      .headline {
+        font-size: 36px;
+      }
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    ::selection {
+      background: rgba(88, 166, 255, 0.3);
+      color: var(--muted);
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
     }
   </style>
 </head>
 
 <body>
-
   <div class="container" id="top">
-    <!-- NAV -->
     <header>
       <div class="nav-wrap">
         <div class="nav" id="nav">
@@ -889,7 +1136,6 @@
       </div>
     </header>
 
-    <!-- MOBILE SIDE NAV -->
     <div id="mobileNav" class="mobile-nav" aria-hidden="true">
       <div class="mobile-nav-header">
         <span class="mobile-title">Menu</span>
@@ -909,7 +1155,6 @@
       </div>
     </div>
 
-    <!-- HERO -->
     <section id="home" class="hero reveal-on-scroll">
       <div class="hero-card">
         <h1 class="headline">Hi, I'm <span style="color:var(--accent)">Sangeetha Rao</span></h1>
@@ -928,14 +1173,13 @@
           <a class="secondary" href="#contact">Contact</a>
         </div>
 
-        <!-- Get Connected buttons -->
         <div class="social-connect" aria-label="Get connected on social platforms">
           <span class="social-connect-label">Get connected:</span>
           <a class="social-btn" href="https://www.linkedin.com/in/your-linkedin-username" target="_blank"
             rel="noopener noreferrer">
             <span>LinkedIn</span>
           </a>
-          <a class="social-btn" href="https://wa.me/your-whatsapp-number-with-country-code" target="_blank"
+          <a class="social-btn" href="https://wa.me/919491583719" target="_blank"
             rel="noopener noreferrer">
             <span>WhatsApp</span>
           </a>
@@ -963,18 +1207,32 @@
       </aside>
     </section>
 
-    <!-- ABOUT -->
+    <!-- UPDATED ABOUT SECTION -->
     <section id="about" class="reveal-on-scroll">
-      <div class="hero-card">
+      <div class="hero-card about-card">
         <h2>About Me</h2>
-        <p class="muted" style="margin-top:8px">
-          I’m a student building projects to learn real skills. My focus areas: Embedded Systems, Front-end Web, and
-          small full-stack experiments. I enjoy clear design, performance and accessibility.
+        <p class="about-text">
+          I’m a student passionate about building projects that turn ideas into working systems. My main focus areas are
+          Embedded Systems, Front-end Web Development, and small full-stack experiments where I can bridge the gap
+          between hardware and software.
+        </p>
+        <p class="about-text">
+          I enjoy designing interfaces that are clean, accessible, and responsive, ensuring every project is intuitive
+          and inclusive. On the embedded side, I like working close to the hardware — integrating sensors, optimizing
+          performance, and learning how systems communicate efficiently.
+        </p>
+        <p class="about-text">
+          Beyond coding, I focus on learning by doing — experimenting with new technologies, refining performance, and
+          keeping usability at the center of my work. Each project I take on is an opportunity to grow as a developer
+          and engineer, building both technical depth and creative problem-solving skills.
+        </p>
+        <p class="about-text">
+          My goal is to create technology that’s not only functional but also thoughtfully crafted — blending design
+          clarity, system reliability, and user experience excellence.
         </p>
       </div>
     </section>
 
-    <!-- SKILLS -->
     <section id="skills">
       <div class="spaced" style="align-items:center;margin-bottom:10px">
         <h2 class="reveal-on-scroll">Skills</h2>
@@ -984,7 +1242,6 @@
       <div class="cards" id="skillsList"></div>
     </section>
 
-    <!-- PROJECTS -->
     <section id="projects">
       <div class="spaced" style="align-items:center;margin-bottom:12px">
         <h2 class="reveal-on-scroll">Projects</h2>
@@ -994,7 +1251,6 @@
       <div class="cards" id="projectsList"></div>
     </section>
 
-    <!-- CERTIFICATIONS -->
     <section id="certifications" class="reveal-on-scroll">
       <h2>Certifications</h2>
       <div class="cert-card">
@@ -1032,7 +1288,6 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
     <section id="contact" class="reveal-on-scroll">
       <h2>Contact</h2>
       <div class="contact-card">
@@ -1055,7 +1310,6 @@
     </footer>
   </div>
 
-  <!-- Shared modal -->
   <div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-hidden="true">
     <div class="modal" role="document" aria-modal="true" id="modal">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
@@ -1086,7 +1340,7 @@
           desc: "This site: responsive, animated, theme toggle.",
           details: "Built from scratch: responsive layout, animated reveal, project modal, filter & tilt interactions. Tech: HTML/CSS/JS.",
           tags: ["Web"],
-          link: "https://jammi-sangeetha-rao.netlify.app/"
+          link: "#"
         },
         {
           id: "p2",
@@ -1094,7 +1348,7 @@
           desc: "Vanilla JS to-do with localStorage.",
           details: "Create/update/delete tasks, persists with localStorage; stores timestamp. Tech: JS, localStorage.",
           tags: ["Web", "JS"],
-          link: "https://todowebapplicationn.netlify.app/"
+          link: "#"
         },
         {
           id: "p3",
@@ -1468,19 +1722,35 @@
 
       const contactForm = document.getElementById('contactForm');
       const formMsg = document.getElementById('formMsg');
+
       contactForm.addEventListener('submit', (e) => {
         e.preventDefault();
+
         const name = $('#name').value.trim();
         const email = $('#email').value.trim();
         const message = $('#message').value.trim();
+
         if (!name || !email || !message) {
           formMsg.textContent = 'Please fill in all fields.';
           formMsg.style.color = '#f97373';
           return;
         }
-        formMsg.textContent = 'Thanks! This demo form does not actually send yet.';
+
+        const whatsappNumber = '919491583719';
+
+        const whatsappText =
+          `New portfolio contact:` +
+          `\nName: ${name}` +
+          `\nEmail: ${email}` +
+          `\nMessage: ${message}`;
+
+        const encodedText = encodeURIComponent(whatsappText);
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedText}`;
+
+        window.open(whatsappUrl, '_blank');
+
+        formMsg.textContent = 'Opening WhatsApp… you can send the message there.';
         formMsg.style.color = 'var(--muted-2)';
-        contactForm.reset();
       });
     }
 
